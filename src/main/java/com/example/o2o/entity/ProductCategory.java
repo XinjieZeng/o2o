@@ -1,8 +1,13 @@
 package com.example.o2o.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "tb_product_category")
 public class ProductCategory {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long productCategoryId;
 	private Long shopId;
 	private String productCategoryName;

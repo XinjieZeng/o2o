@@ -1,10 +1,13 @@
 package com.example.o2o.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
-
+@Entity
+@Table(name = "tb_shop_category")
 public class ShopCategory {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long shopCategoryId;
 	private String shopCategoryName;
 	private String shopCategoryDesc;
@@ -12,6 +15,8 @@ public class ShopCategory {
 	private Integer priority;
 	private Date createTime;
 	private Date lastEditTime;
+	@OneToOne
+	@JoinColumn(name = "shop_category_id")
 	private ShopCategory parent;
 
 	public Long getShopCategoryId() {

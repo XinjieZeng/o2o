@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
 import java.util.Date;
 
 @Service
@@ -27,7 +29,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopExecution addShop(Shop shop, File shopImg) {
+    public ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) {
         if (shop == null) {
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
         }
@@ -37,18 +39,18 @@ public class ShopServiceImpl implements ShopService {
             shop.setCreateTime(new Date());
             shop.setLastEditTime(new Date());
 
-            long effectedRow = shopDao.save(shop);
-            if (effectedRow <= 0) {
-                throw new ShopOperationException("fail to add a shop");
-            }
+            shopDao.save(shop);
+//            if (effectedRow <= 0) {
+//                throw new ShopOperationException("fail to add a shop");
+//            }
 
-            if (shopImg != null) {
-                addShopImage(shop, shopImg);
-                effectedRow = shopDao.save(shop);
+            if (shopImgInputStream != null) {
+                addShopImage(shop, shopImgInputStream, fileName);
+                shopDao.save(shop);
 
-                if (effectedRow <= 0) {
-                    throw new ShopOperationException("fail to add a shop");
-                }
+//                if (effectedRow <= 0) {
+//                    throw new ShopOperationException("fail to add a shop");
+//                }
             }
 
         }catch (RuntimeException e) {
@@ -58,9 +60,9 @@ public class ShopServiceImpl implements ShopService {
         return new ShopExecution(ShopStateEnum.CHECK, shop);
     }
 
-    private void addShopImage(Shop shop, File shopImage) {
+    private void addShopImage(Shop shop, InputStream shopImgInputStream, String fileName) {
         String dest = PathUtil.getShopImagePath(shop.getShopId());
-        String relativeAdd = ImageUtil.generateThumbnail(shopImage, dest);
+        String relativeAdd = ImageUtil.generateThumbnail(shopImgInputStream, fileName, dest);
         shop.setShopImg(relativeAdd);
     }
 }

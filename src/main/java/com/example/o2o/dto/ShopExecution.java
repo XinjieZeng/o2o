@@ -44,4 +44,12 @@ public class ShopExecution {
         this.shopList = shopList;
         this.count = shopList.size();
     }
+
+    public int getState() {
+        return state;
+    }
+
+    public String getStateInfo() {
+        return stateInfo;
+    }
 }

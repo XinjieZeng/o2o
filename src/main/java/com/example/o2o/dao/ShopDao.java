@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShopDao extends CrudRepository<Shop, Long> {
-
-    Long save(Shop shop);
+    Shop save(Shop shop);
 
 }

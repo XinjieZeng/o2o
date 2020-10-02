@@ -8,6 +8,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,13 +40,10 @@ public class ImageUtil {
     /**
      * handle the thumbnail from images uploaded by users
      * and return the relative path of image that is stored
-     * @param file
-     * @param targetAddr
-     * @return
      */
-    public static String generateThumbnail(File file, String targetAddr) {
-        String fileName = generateRandomName();
-        String extension = getFileExtension(file);
+    public static String generateThumbnail(InputStream thumbnailInputStream, String fileName, String targetAddr) {
+        String realFileName = generateRandomName();
+        String extension = getFileExtension(fileName);
         makeDirPath(targetAddr);
         String relativeAddr = targetAddr + fileName + extension;
         logger.debug("current relative address is: " + relativeAddr);
@@ -53,7 +51,7 @@ public class ImageUtil {
         logger.debug("current absolute address is: " + PathUtil.getImgBasePath() + relativeAddr);
 
         try {
-            Thumbnails.of(file)
+            Thumbnails.of(thumbnailInputStream)
                     .size(200, 200)
                     .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "watermark.jpg")), 0.25f)
                     .outputQuality(0.8)
@@ -79,13 +77,12 @@ public class ImageUtil {
         }
     }
 
-    private static String getFileExtension(File file) {
-        String originFile = file.getName();
-        return originFile.substring(originFile.lastIndexOf("."));
+    private static String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 
 
-    private static String generateRandomName() {
+    public static String generateRandomName() {
         LocalDateTime now = LocalDateTime.now();
         return simpleDateFormat.format(now) + random.nextInt(90000) + 10000;
     }

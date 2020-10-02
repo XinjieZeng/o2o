@@ -26,8 +26,14 @@ public class Shop {
 	// -1.forbidden 0.under review 1. available
 	private Integer enableStatus;
 	private String advice;
+	@ManyToOne
+	@JoinColumn(name="area_id")
 	private Area area;
+	@ManyToOne
+	@JoinColumn(name="owner_id")
 	private PersonInfo owner;
+	@ManyToOne
+	@JoinColumn(name = "shop_category_id")
 	private ShopCategory shopCategory;
 
 	public Long getShopId() {

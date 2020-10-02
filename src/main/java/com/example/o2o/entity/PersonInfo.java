@@ -1,5 +1,6 @@
 package com.example.o2o.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -8,7 +9,11 @@ import java.util.Date;
  * @author xiangze
  *
  */
+@Entity
+@Table(name = "tb_person_info")
 public class PersonInfo {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long userId;
 	private String name;
 	private String profileImg;
