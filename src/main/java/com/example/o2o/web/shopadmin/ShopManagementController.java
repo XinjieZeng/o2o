@@ -1,9 +1,13 @@
-package com.example.o2o.controller.superadmin;
+package com.example.o2o.web.shopadmin;
 
 import com.example.o2o.dto.ShopExecution;
+import com.example.o2o.entity.Area;
 import com.example.o2o.entity.PersonInfo;
 import com.example.o2o.entity.Shop;
+import com.example.o2o.entity.ShopCategory;
 import com.example.o2o.enums.ShopStateEnum;
+import com.example.o2o.service.AreaService;
+import com.example.o2o.service.ShopCategoryService;
 import com.example.o2o.service.ShopService;
 import com.example.o2o.util.HttpServletRequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,17 +23,41 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/shopadmin")
+@RequestMapping("o2o/shopadmin")
 public class ShopManagementController {
 
     private final ShopService shopService;
+    private final ShopCategoryService shopCategoryService;
+    private final AreaService areaService;
 
     @Autowired
-    public ShopManagementController(ShopService shopService) {
+    public ShopManagementController(ShopService shopService, ShopCategoryService shopCategoryService, AreaService areaService) {
         this.shopService = shopService;
+        this.shopCategoryService = shopCategoryService;
+        this.areaService = areaService;
+    }
+
+    @RequestMapping(path = "/getshopinitinfo", method = RequestMethod.GET)
+    @ResponseBody
+    private Map<String, Object> getShopInitInfo() {
+        Map<String, Object> modelMap = new HashMap<>();
+
+        try {
+            List<ShopCategory> shopCategoryList = shopCategoryService.getShopCategoryList();
+            List<Area> areaList = areaService.getAreaList();
+            modelMap.put("success", true);
+            modelMap.put("shopCategoryList", shopCategoryList);
+            modelMap.put("areaList", areaList);
+
+        } catch (Exception e) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", e.getMessage());
+        }
+        return modelMap;
     }
 
     @RequestMapping(path = "/addshop", method = RequestMethod.POST)

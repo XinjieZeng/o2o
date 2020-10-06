@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Add Shops</title>
+    <meta name="description" content="MSUI: Build mobile apps with simple HTML, CSS, and JS components.">
+    <meta name="author" content="阿里巴巴国际UED前端">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+
+<!--    <link th:href="@{/css/shop/shopoperation.css}" rel="stylesheet" />-->
+
+
+</head>
+<body>
+<div class="page-group">
+    <div id="page-label-input" class="page">
+        <header class="bar bar-nav">
+            <h1 class="title">Shop Information</h1>
+        </header>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <!-- Text inputs -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Shop Name</div>
+                                <div class="item-input">
+                                    <input type="text" id="shop-name" placeholder="shop name">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Shop category -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Shop Category</div>
+                                <div class="item-input">
+                                    <select id="shop-category">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- area -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Area</div>
+                                <div class="item-input">
+                                    <select id="area">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <!-- address -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Address</div>
+                                <div class="item-input">
+                                    <input type="text" id="shop-addr" placeholder="address">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- telephone number -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">phone number</div>
+                                <div class="item-input">
+                                    <input type="text" id="shop-phone" placeholder="phone number">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Thumbnail -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Address</div>
+                                <div class="item-input">
+                                    <input type="file" id="shop-img">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- shop description -->
+                    <li class="align-top">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">Shop Description</div>
+                                <div class="item-input">
+                                    <textarea id="shop-desc" placeholder="shop description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <div class="row">
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-danger">Return</a></div>
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="submit">Submit</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="webjars/jquery/3.2.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+<script type="text/javascript" th:src="@{/js/shop/shopoperation.js}"></script>
+
+</body>
+</html>

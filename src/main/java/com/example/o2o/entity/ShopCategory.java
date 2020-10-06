@@ -15,9 +15,7 @@ public class ShopCategory {
 	private Integer priority;
 	private Date createTime;
 	private Date lastEditTime;
-	@OneToOne
-	@JoinColumn(name = "shop_category_id")
-	private ShopCategory parent;
+	private Long parentId;
 
 	public Long getShopCategoryId() {
 		return shopCategoryId;
@@ -75,11 +73,11 @@ public class ShopCategory {
 		this.lastEditTime = lastEditTime;
 	}
 
-	public ShopCategory getParent() {
-		return parent;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setParent(ShopCategory parent) {
-		this.parent = parent;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 }

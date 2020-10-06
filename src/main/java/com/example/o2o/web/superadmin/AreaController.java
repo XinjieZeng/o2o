@@ -1,4 +1,4 @@
-package com.example.o2o.controller.superadmin;
+package com.example.o2o.web.superadmin;
 
 import com.example.o2o.entity.Area;
 import com.example.o2o.enums.ConstantForSuperAdmin;
