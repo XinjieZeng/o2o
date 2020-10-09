@@ -3,12 +3,7 @@ package com.example.o2o.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * 个人信息实体类
- * 
- * @author xiangze
- *
- */
+
 @Entity
 @Table(name = "tb_person_info")
 public class PersonInfo {

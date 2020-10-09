@@ -1,10 +1,7 @@
-/**
- *
- */
 
 $(function() {
     var initUrl = '/o2o/shopadmin/getshopinitinfo';
-    var registerShopUrl = '/o2o/shopadmin/registershop';
+    var addShopUrl = '/o2o/shopadmin/addshop';
 
     getShopInitInfo();
     function getShopInitInfo() {
@@ -53,15 +50,9 @@ $(function() {
         });
     }
 
-
-
     $('#submit').click(function() {
-        alert("submit");
         var shop = {};
-        if (isEdit) {
-            shop.shopId = shopId;
-        }
-
+        shop.shopId = 10;
         shop.shopName = $('#shop-name').val();
         shop.shopAddr = $('#shop-addr').val();
         shop.phone = $('#shop-phone').val();
@@ -84,17 +75,16 @@ $(function() {
         var formData = new FormData();
 
         formData.append('shopImg', shopImg);
-
         formData.append('shopStr', JSON.stringify(shop));
         var verifyCodeActual = $('#j_captcha').val();
         if (!verifyCodeActual) {
-            $.toast('请输入验证码！');
+            alert('请输入验证码！');
             return;
         }
         formData.append('verifyCodeActual', verifyCodeActual);
 
         $.ajax({
-            url : (isEdit ? editShopUrl : registerShopUrl),
+            url :addShopUrl,
             type : 'POST',
             data : formData,
             contentType : false,
@@ -102,16 +92,12 @@ $(function() {
             cache : false,
             success : function(data) {
                 if (data.success) {
-                    $.toast('提交成功！');
-                    if (!isEdit) {
+                    alert('add successfully！');
+                    //window.location.href = "/o2o/shopadmin/shoplist";
 
-                        window.location.href = "/o2o/shopadmin/shoplist";
-                    }
                 } else {
-                    $.toast('提交失败！' + data.errMsg);
+                    alert('add failed！' + data.errMsg);
                 }
-
-                $('#captcha_img').click();
             }
         });
     });

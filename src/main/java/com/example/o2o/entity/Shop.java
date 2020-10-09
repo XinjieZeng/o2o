@@ -13,7 +13,6 @@ import java.util.Date;
 @Table(name="tb_shop")
 public class Shop {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long shopId;
 	private String shopName;
 	private String shopDesc;

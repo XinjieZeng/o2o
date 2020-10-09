@@ -9,18 +9,24 @@ import com.example.o2o.enums.ShopStateEnum;
 import com.example.o2o.service.AreaService;
 import com.example.o2o.service.ShopCategoryService;
 import com.example.o2o.service.ShopService;
+import com.example.o2o.util.CodeUtil;
 import com.example.o2o.util.HttpServletRequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -30,16 +36,41 @@ import java.util.Map;
 @RequestMapping("o2o/shopadmin")
 public class ShopManagementController {
 
-    private final ShopService shopService;
-    private final ShopCategoryService shopCategoryService;
-    private final AreaService areaService;
-
     @Autowired
-    public ShopManagementController(ShopService shopService, ShopCategoryService shopCategoryService, AreaService areaService) {
-        this.shopService = shopService;
-        this.shopCategoryService = shopCategoryService;
-        this.areaService = areaService;
+    private ShopService shopService;
+    @Autowired
+    private ShopCategoryService shopCategoryService;
+    @Autowired
+    private AreaService areaService;
+    @Autowired
+    DefaultKaptcha defaultKaptcha;
+
+
+    @GetMapping("/defaultKaptcha")
+    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+        byte[] captchaChallengeAsJpeg = null;
+        ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+        try {
+            String createText = defaultKaptcha.createText();
+            httpServletRequest.getSession().setAttribute("verificationCode", createText);
+            BufferedImage challenge = defaultKaptcha.createImage(createText);
+            ImageIO.write(challenge, "jpg", jpegOutputStream);
+        } catch (IllegalArgumentException e) {
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        httpServletResponse.setHeader("Cache-Control", "no-store");
+        httpServletResponse.setHeader("Pragma", "no-cache");
+        httpServletResponse.setDateHeader("Expires", 0);
+        httpServletResponse.setContentType("image/jpeg");
+        ServletOutputStream responseOutputStream = httpServletResponse.getOutputStream();
+        responseOutputStream.write(captchaChallengeAsJpeg);
+        responseOutputStream.flush();
+        responseOutputStream.close();
     }
+
 
     @RequestMapping(path = "/getshopinitinfo", method = RequestMethod.GET)
     @ResponseBody
@@ -65,8 +96,14 @@ public class ShopManagementController {
     private Map<String, Object> addShop(HttpServletRequest request) {
         // receive shop information and convert them into Shop class
         Map<String, Object> modelMap = new HashMap<>();
-        String shopStr = HttpServletRequestUtil.getString(request, "shopStr");
 
+        if (!CodeUtil.checkVerifyCode(request)) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", "the verification is not valid");
+            return modelMap;
+        }
+
+        String shopStr = HttpServletRequestUtil.getString(request, "shopStr");
         ObjectMapper mapper = new ObjectMapper();
         Shop shop;
         try {
@@ -78,14 +115,13 @@ public class ShopManagementController {
         }
 
         // store the uploaded image stream
-        CommonsMultipartFile shopImg = null;
+        MultipartFile shopImg = null;
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 
         if (commonsMultipartResolver.isMultipart(request)) {
             MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
-            shopImg = (CommonsMultipartFile) multipartHttpServletRequest.getFile("shopImg");
-        }
-        else {
+            shopImg = multipartHttpServletRequest.getFile("shopImg");
+        } else {
             modelMap.put("success", false);
             modelMap.put("errMsg", "the image can not be empty");
             return modelMap;
@@ -95,7 +131,7 @@ public class ShopManagementController {
         if (shop != null && shopImg != null) {
             PersonInfo owner = new PersonInfo();
             //TODO SESSION
-            owner.setUserId(2L);
+            owner.setUserId(1L);
             shop.setOwner(owner);
 
             ShopExecution shopExecution = null;
@@ -103,8 +139,7 @@ public class ShopManagementController {
                 shopExecution = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
                 if (shopExecution.getState() == ShopStateEnum.CHECK.getState()) {
                     modelMap.put("success", true);
-                }
-                else {
+                } else {
                     modelMap.put("success", false);
                     modelMap.put("errMsg", shopExecution.getStateInfo());
                 }
@@ -115,12 +150,11 @@ public class ShopManagementController {
                 return modelMap;
             }
 
-        }
-        else {
+        } else {
             modelMap.put("success", false);
             modelMap.put("errMsg", "please enter the shop information");
         }
 
-       return modelMap;
+        return modelMap;
     }
 }

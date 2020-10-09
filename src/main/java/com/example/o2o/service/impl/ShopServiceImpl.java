@@ -39,18 +39,19 @@ public class ShopServiceImpl implements ShopService {
             shop.setCreateTime(new Date());
             shop.setLastEditTime(new Date());
 
-            shopDao.save(shop);
-//            if (effectedRow <= 0) {
-//                throw new ShopOperationException("fail to add a shop");
-//            }
+            Shop res = shopDao.save(shop);
+            System.out.println(res);
+            if (res == null) {
+                throw new ShopOperationException("fail to add a shop");
+            }
 
             if (shopImgInputStream != null) {
                 addShopImage(shop, shopImgInputStream, fileName);
-                shopDao.save(shop);
+                res = shopDao.save(shop);
 
-//                if (effectedRow <= 0) {
-//                    throw new ShopOperationException("fail to add a shop");
-//                }
+                if (res == null) {
+                    throw new ShopOperationException("fail to add a shop");
+                }
             }
 
         }catch (RuntimeException e) {

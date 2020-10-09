@@ -12,8 +12,11 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -24,7 +27,7 @@ public class ImageUtil {
     private static final String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     private static final Logger logger = LoggerFactory.getLogger(ImageUtil.class);
     private static final Random random = new Random();
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private static final DateTimeFormatter simpleDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm:ss");
 
     public File transferCommonsMultipartFileToFile(CommonsMultipartFile cFile) {
 
@@ -45,7 +48,7 @@ public class ImageUtil {
         String realFileName = generateRandomName();
         String extension = getFileExtension(fileName);
         makeDirPath(targetAddr);
-        String relativeAddr = targetAddr + fileName + extension;
+        String relativeAddr = targetAddr + "/" + realFileName + extension;
         logger.debug("current relative address is: " + relativeAddr);
         File dest = new File(PathUtil.getImgBasePath() + relativeAddr);
         logger.debug("current absolute address is: " + PathUtil.getImgBasePath() + relativeAddr);
@@ -84,7 +87,7 @@ public class ImageUtil {
 
     public static String generateRandomName() {
         LocalDateTime now = LocalDateTime.now();
-        return simpleDateFormat.format(now) + random.nextInt(90000) + 10000;
+        return now.format(simpleDateFormat) + random.nextInt(90000) + 10000;
     }
 
     public static void main(String[] args) throws IOException {
