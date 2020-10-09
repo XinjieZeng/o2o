@@ -3,12 +3,6 @@ package com.example.o2o.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * 店铺实体类
- * 
- * @author xiangze
- *
- */
 @Entity
 @Table(name="tb_shop")
 public class Shop {

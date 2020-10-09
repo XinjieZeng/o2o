@@ -8,7 +8,6 @@ import java.util.Date;
 @Table(name = "tb_person_info")
 public class PersonInfo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long userId;
 	private String name;
 	private String profileImg;

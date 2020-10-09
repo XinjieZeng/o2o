@@ -10,7 +10,6 @@ import java.util.Date;
 @Table(name="tb_area")
 public class Area {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer areaId;
 	private String areaName;
 	private Integer priority;

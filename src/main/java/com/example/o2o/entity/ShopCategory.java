@@ -7,7 +7,6 @@ import java.util.Date;
 @Table(name = "tb_shop_category")
 public class ShopCategory {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long shopCategoryId;
 	private String shopCategoryName;
 	private String shopCategoryDesc;
