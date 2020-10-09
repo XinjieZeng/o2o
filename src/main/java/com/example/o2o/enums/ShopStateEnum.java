@@ -10,7 +10,9 @@ public enum ShopStateEnum {
     UNSUCCESSFUL(3, "unsuccessful"),
     PASS(4, "pass"),
     NULL_SHOP_ID(-1000, "shop id is empty"),
-    NULL_SHOP(-1001, "shop is null");
+    SHOP_ALREADY_EXIST(-1002, "shop already exists"),
+    NULL_SHOP(-1001, "shop is null"),
+    INTERNAL_ERROR(-1004, "internal error");
 
     private final int state;
     private final String stateInfo;

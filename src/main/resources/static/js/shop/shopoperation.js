@@ -78,7 +78,7 @@ $(function() {
         formData.append('shopStr', JSON.stringify(shop));
         var verifyCodeActual = $('#j_captcha').val();
         if (!verifyCodeActual) {
-            alert('请输入验证码！');
+            alert('please fill verification code！');
             return;
         }
         formData.append('verifyCodeActual', verifyCodeActual);

@@ -8,7 +8,9 @@ import com.example.o2o.exceptions.ShopOperationException;
 import com.example.o2o.service.ShopService;
 import com.example.o2o.util.ImageUtil;
 import com.example.o2o.util.PathUtil;
+
 import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,28 +36,16 @@ public class ShopServiceImpl implements ShopService {
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
         }
 
-        try {
-            shop.setEnableStatus(0);
-            shop.setCreateTime(new Date());
-            shop.setLastEditTime(new Date());
 
-            Shop res = shopDao.save(shop);
-            System.out.println(res);
-            if (res == null) {
-                throw new ShopOperationException("fail to add a shop");
-            }
+        shop.setEnableStatus(0);
+        shop.setCreateTime(new Date());
+        shop.setLastEditTime(new Date());
 
-            if (shopImgInputStream != null) {
-                addShopImage(shop, shopImgInputStream, fileName);
-                res = shopDao.save(shop);
+        shopDao.save(shop);
 
-                if (res == null) {
-                    throw new ShopOperationException("fail to add a shop");
-                }
-            }
-
-        }catch (RuntimeException e) {
-            logger.error("add shop error: " + e.getMessage());
+        if (shopImgInputStream != null) {
+            addShopImage(shop, shopImgInputStream, fileName);
+            shopDao.save(shop);
         }
 
         return new ShopExecution(ShopStateEnum.CHECK, shop);
