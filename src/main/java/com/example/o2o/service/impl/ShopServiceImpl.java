@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -49,6 +50,34 @@ public class ShopServiceImpl implements ShopService {
         }
 
         return new ShopExecution(ShopStateEnum.CHECK, shop);
+    }
+
+    @Override
+    public Shop getShopById(Long shopId) {
+        return Optional.of(shopDao.findById(shopId)).get().orElse(new Shop());
+    }
+
+    @Override
+    public ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName) {
+        if (shop == null || shop.getShopId() == null) {
+            return new ShopExecution(ShopStateEnum.NULL_SHOP);
+        }
+
+        Shop tempShop = getShopById(shop.getShopId());
+
+        if (shopImgInputStream != null &&  !"".equals(fileName)) {
+            if (tempShop.getShopImg() != null) {
+                ImageUtil.deleteFileOrPath(tempShop.getShopImg());
+            }
+            addShopImage(shop, shopImgInputStream, fileName);
+        }
+
+        shop.setCreateTime(tempShop.getCreateTime());
+        shop.setEnableStatus(tempShop.getEnableStatus());
+        shop.setLastEditTime(new Date());
+
+        shopDao.save(shop);
+        return new ShopExecution(ShopStateEnum.SUCCESSFUL);
     }
 
     private void addShopImage(Shop shop, InputStream shopImgInputStream, String fileName) {

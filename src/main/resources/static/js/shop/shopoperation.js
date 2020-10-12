@@ -1,9 +1,19 @@
 
 $(function() {
+    var shopId = getQueryString('shopId');
+    var isEdit = shopId ? true : false;
     var initUrl = '/o2o/shopadmin/getshopinitinfo';
     var addShopUrl = '/o2o/shopadmin/addshop';
+    var editShopUrl = '/o2o/shopadmin/modifyshop';
+    var shopInfoUrl = "/o2o/shopadmin/getshopbyid?shopId=" + shopId;
 
-    getShopInitInfo();
+    if (isEdit) {
+        getShopInfo(shopId);
+    }
+    else {
+        getShopInitInfo();
+    }
+
     function getShopInitInfo() {
         $.getJSON(initUrl, function(data) {
             if (data.success) {
@@ -52,7 +62,13 @@ $(function() {
 
     $('#submit').click(function() {
         var shop = {};
-        shop.shopId = 10;
+
+        if (isEdit) {
+            shop.shopId = shopId;
+        }
+        else {
+            shop.shopId = 10;
+        }
         shop.shopName = $('#shop-name').val();
         shop.shopAddr = $('#shop-addr').val();
         shop.phone = $('#shop-phone').val();
@@ -78,13 +94,13 @@ $(function() {
         formData.append('shopStr', JSON.stringify(shop));
         var verifyCodeActual = $('#j_captcha').val();
         if (!verifyCodeActual) {
-            alert('please fill verification code！');
+            invalidCode();
             return;
         }
         formData.append('verifyCodeActual', verifyCodeActual);
 
         $.ajax({
-            url :addShopUrl,
+            url :(isEdit? editShopUrl : addShopUrl),
             type : 'POST',
             data : formData,
             contentType : false,
@@ -92,11 +108,9 @@ $(function() {
             cache : false,
             success : function(data) {
                 if (data.success) {
-                    alert('add successfully！');
-                    //window.location.href = "/o2o/shopadmin/shoplist";
-
+                    successSubmit();
                 } else {
-                    alert('add failed！' + data.errMsg);
+                    failSubmit();
                 }
             }
         });
