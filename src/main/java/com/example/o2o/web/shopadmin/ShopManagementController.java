@@ -14,6 +14,7 @@ import com.example.o2o.util.HttpServletRequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,54 @@ public class ShopManagementController {
     DefaultKaptcha defaultKaptcha;
 
 
+    @GetMapping("/getshoplist")
+    @ResponseBody
+    private Map<String, Object> getShopList(HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<>();
+        PersonInfo user = new PersonInfo();
+        user.setUserId(1L);
+        request.getSession().setAttribute("user", user);
+        user = (PersonInfo) request.getSession().getAttribute("user");
+
+        try {
+            Shop shopCondition = new Shop();
+            shopCondition.setOwner(user);
+            ShopExecution shopExecution = shopService.getShopList(shopCondition);
+            modelMap.put("success", true);
+            modelMap.put("shopList", shopExecution.getShopList());
+            modelMap.put("user", user);
+        } catch (Exception e) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", e.getMessage());
+        }
+        return modelMap;
+    }
+
+    @GetMapping("/getshopmanagementinfo")
+    @ResponseBody
+    private Map<String, Object> getShopManagementInfo(HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<>();
+        long shopId = HttpServletRequestUtil.getLong(request, "shopId");
+        if (shopId <= 0) {
+            Object currentShopObj = request.getSession().getAttribute("currentShop");
+            if (currentShopObj == null) {
+                modelMap.put("redirect", true);
+                modelMap.put("url", "o2o/shop/shoplist");
+                return modelMap;
+            }
+
+            Shop currentShop = (Shop) currentShopObj;
+            modelMap.put("redirect", false);
+            modelMap.put("shopId", currentShop.getShopId());
+            return modelMap;
+        }
+
+        Shop currentShop = new Shop();
+        currentShop.setShopId(shopId);
+        request.getSession().setAttribute("currentShop", currentShop);
+        return modelMap;
+    }
+
     @GetMapping("/defaultKaptcha")
     public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         byte[] captchaChallengeAsJpeg = null;
@@ -73,7 +122,7 @@ public class ShopManagementController {
     }
 
 
-    @RequestMapping(path = "/getshopinitinfo", method = RequestMethod.GET)
+    @GetMapping("/getshopinitinfo")
     @ResponseBody
     private Map<String, Object> getShopInitInfo() {
         Map<String, Object> modelMap = new HashMap<>();
@@ -92,7 +141,7 @@ public class ShopManagementController {
         return modelMap;
     }
 
-    @RequestMapping(path = "/addshop", method = RequestMethod.POST)
+    @GetMapping(path = "/addshop")
     @ResponseBody
     private Map<String, Object> addShop(HttpServletRequest request) {
         // receive shop information and convert them into Shop class
@@ -122,7 +171,8 @@ public class ShopManagementController {
         if (commonsMultipartResolver.isMultipart(request)) {
             MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
             shopImg = multipartHttpServletRequest.getFile("shopImg");
-        } else {
+        }
+        else {
             modelMap.put("success", false);
             modelMap.put("errMsg", "the image can not be empty");
             return modelMap;
@@ -140,10 +190,11 @@ public class ShopManagementController {
                 shopExecution = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
                 if (shopExecution.getState() == ShopStateEnum.CHECK.getState()) {
                     modelMap.put("success", true);
-                } else {
-                    modelMap.put("success", false);
-                    modelMap.put("errMsg", shopExecution.getStateInfo());
+                    return modelMap;
                 }
+                modelMap.put("success", false);
+                modelMap.put("errMsg", shopExecution.getStateInfo());
+                return modelMap;
 
             } catch (IOException e) {
                 modelMap.put("success", false);
@@ -151,11 +202,10 @@ public class ShopManagementController {
                 return modelMap;
             }
 
-        } else {
-            modelMap.put("success", false);
-            modelMap.put("errMsg", "please enter the shop information");
         }
 
+        modelMap.put("success", false);
+        modelMap.put("errMsg", "please enter the shop information");
         return modelMap;
     }
 
@@ -176,15 +226,16 @@ public class ShopManagementController {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", e.toString());
             }
-        } else {
-            modelMap.put("success", false);
-            modelMap.put("errMsg", "empty shopId");
+            return modelMap;
         }
+
+        modelMap.put("success", false);
+        modelMap.put("errMsg", "empty shopId");
         return modelMap;
     }
 
 
-    @RequestMapping(value = "/modifyshop", method = RequestMethod.POST)
+    @GetMapping(value = "/modifyshop")
     @ResponseBody
     private Map<String, Object> modifyShop(HttpServletRequest request) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -229,20 +280,22 @@ public class ShopManagementController {
 
                 if (se.getState() == ShopStateEnum.SUCCESSFUL.getState()) {
                     modelMap.put("success", true);
-                } else {
-                    modelMap.put("success", false);
-                    modelMap.put("errMsg", se.getStateInfo());
+                    return modelMap;
                 }
+
+                modelMap.put("success", false);
+                modelMap.put("errMsg", se.getStateInfo());
                 return modelMap;
+
             } catch (Exception e) {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", e.getMessage());
                 return modelMap;
             }
-        } else {
-            modelMap.put("success", false);
-            modelMap.put("errMsg", "请输入店铺Id");
-            return modelMap;
         }
+
+        modelMap.put("success", false);
+        modelMap.put("errMsg", "请输入店铺Id");
+        return modelMap;
     }
 }

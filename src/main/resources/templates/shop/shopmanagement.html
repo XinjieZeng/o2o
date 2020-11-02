@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>商店管理</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+
+<body>
+<header class="bar bar-nav">
+    <h1 class="title">Shop Management</h1>
+</header>
+<div class="content">
+    <div class="content-block">
+        <div class="row">
+            <div class="col-50 mb">
+                <a id="shopInfo" href="/o2o/shopadmin"
+                   class="button button-big button-fill">Shop Information</a>
+            </div>
+            <div class="col-50 mb">
+                <a href="/o2o/shopadmin/productmanagement"
+                   class="button button-big button-fill">Product Management</a>
+            </div>
+            <div class="col-50 mb">
+                <a href="/o2o/shopadmin/productcategorymanagement"
+                   class="button button-big button-fill">Product Category Management</a>
+            </div>
+            <div class="col-100 mb">
+                <a href="/o2o/shopadmin/shoplist"
+                   class="button button-big button-fill button-danger">Return</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script type="text/javascript" th:src="@{/js/shop/shopmanagement.js}"></script>
+
+</body>
+</html>

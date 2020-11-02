@@ -98,7 +98,6 @@ $(function() {
             return;
         }
         formData.append('verifyCodeActual', verifyCodeActual);
-
         $.ajax({
             url :(isEdit? editShopUrl : addShopUrl),
             type : 'POST',
@@ -107,6 +106,7 @@ $(function() {
             processData : false,
             cache : false,
             success : function(data) {
+                alert(data);
                 if (data.success) {
                     successSubmit();
                 } else {
