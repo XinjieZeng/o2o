@@ -12,6 +12,7 @@ public enum ShopStateEnum {
     NULL_SHOP_ID(-1000, "shop id is empty"),
     SHOP_ALREADY_EXIST(-1002, "shop already exists"),
     NULL_SHOP(-1001, "shop is null"),
+    EMPTY_PRODUCT_CATEGORY(-1003, "empty product category"),
     INTERNAL_ERROR(-1004, "internal error");
 
     private final int state;

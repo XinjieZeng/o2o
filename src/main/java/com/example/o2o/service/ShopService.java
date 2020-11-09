@@ -1,14 +1,12 @@
 package com.example.o2o.service;
 
 import com.example.o2o.dto.ShopExecution;
-import com.example.o2o.entity.Area;
-import com.example.o2o.entity.PersonInfo;
-import com.example.o2o.entity.Shop;
-import com.example.o2o.entity.ShopCategory;
+import com.example.o2o.entity.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 public interface ShopService {
     ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName);

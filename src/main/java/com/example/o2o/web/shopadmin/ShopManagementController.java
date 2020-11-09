@@ -1,12 +1,10 @@
 package com.example.o2o.web.shopadmin;
 
 import com.example.o2o.dto.ShopExecution;
-import com.example.o2o.entity.Area;
-import com.example.o2o.entity.PersonInfo;
-import com.example.o2o.entity.Shop;
-import com.example.o2o.entity.ShopCategory;
+import com.example.o2o.entity.*;
 import com.example.o2o.enums.ShopStateEnum;
 import com.example.o2o.service.AreaService;
+import com.example.o2o.service.ProductCategoryService;
 import com.example.o2o.service.ShopCategoryService;
 import com.example.o2o.service.ShopService;
 import com.example.o2o.util.CodeUtil;
@@ -71,6 +69,8 @@ public class ShopManagementController {
         return modelMap;
     }
 
+
+
     @GetMapping("/getshopmanagementinfo")
     @ResponseBody
     private Map<String, Object> getShopManagementInfo(HttpServletRequest request) {
@@ -95,6 +95,8 @@ public class ShopManagementController {
         request.getSession().setAttribute("currentShop", currentShop);
         return modelMap;
     }
+
+
 
     @GetMapping("/defaultKaptcha")
     public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {

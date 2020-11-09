@@ -2,10 +2,7 @@ package com.example.o2o.service.impl;
 
 import com.example.o2o.dao.ShopDao;
 import com.example.o2o.dto.ShopExecution;
-import com.example.o2o.entity.Area;
-import com.example.o2o.entity.PersonInfo;
-import com.example.o2o.entity.Shop;
-import com.example.o2o.entity.ShopCategory;
+import com.example.o2o.entity.*;
 import com.example.o2o.enums.ShopStateEnum;
 import com.example.o2o.exceptions.ShopOperationException;
 import com.example.o2o.service.ShopService;
@@ -114,6 +111,7 @@ public class ShopServiceImpl implements ShopService {
         }
         return new ShopExecution(ShopStateEnum.SUCCESSFUL, shopList);
     }
+
 
     private void addShopImage(Shop shop, InputStream shopImgInputStream, String fileName) {
         String dest = PathUtil.getShopImagePath(shop.getShopId());
