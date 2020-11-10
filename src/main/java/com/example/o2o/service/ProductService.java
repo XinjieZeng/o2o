@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ProductService {
     ProductExecution addProduct(Product product, ImageHolder thumbnail, List<ImageHolder> productImgList );
+    Product getProductById(Long productId);
+    ProductExecution modifyProduct(Product product, ImageHolder thumbnail, List<ImageHolder> productImgList);
 }

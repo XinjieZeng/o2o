@@ -1,6 +1,7 @@
 package com.example.o2o.dao;
 
 import com.example.o2o.entity.Product;
+import com.example.o2o.entity.Shop;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -9,11 +10,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Repository
 public interface ProductDao extends CrudRepository<Product, Long> {
 
     Product save(Product product);
+    Optional<Product> findById(Long shopId);
+
+    @Override
+    void deleteById(Long aLong);
 
     @Modifying
     @Transactional

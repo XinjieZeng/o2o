@@ -53,6 +53,49 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public Product getProductById(Long productId) {
+        return productDao.findById(productId).orElseGet(null);
+    }
+
+    @Override
+    public ProductExecution modifyProduct(Product product, ImageHolder thumbnail, List<ImageHolder> productImgHolderList) {
+        if (product != null && product.getShop() != null && product.getShop().getShopId() != null) {
+            product.setLastEditTime(new Date());
+
+            //remove original thumbnail
+            if (thumbnail != null) {
+                Product tempProduct = productDao.findById(product.getProductId()).get();
+                if (tempProduct.getImgAddr() != null) {
+                    ImageUtil.deleteFileOrPath(tempProduct.getImgAddr());
+                }
+                addThumbnail(product, thumbnail);
+            }
+
+            //remvoe original image lists
+            if (productImgHolderList != null && productImgHolderList.size() > 0) {
+                deleteProductImgList(product.getProductId());
+                addProductImgList(product, productImgHolderList);
+            }
+            productDao.save(product);
+            return new ProductExecution(ProductStateEnum.SUCCESS);
+
+        }
+
+        return new ProductExecution(ProductStateEnum.EMPTY);
+    }
+
+    private void deleteProductImgList(long productId) {
+
+        List<ProductImg> productImgList = productImgDao.findProductImgList(productId);
+
+        for (ProductImg productImg : productImgList) {
+            ImageUtil.deleteFileOrPath(productImg.getImgAddr());
+        }
+
+        productImgDao.deleteById(productId);
+    }
+
     private void addThumbnail(Product product, ImageHolder thumbnail) {
         String dest = PathUtil.getShopImagePath(product.getShop().getShopId());
         String thumbnailAddr = ImageUtil.generateThumbnail(thumbnail, dest);
