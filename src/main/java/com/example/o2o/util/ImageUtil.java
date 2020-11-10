@@ -1,4 +1,5 @@
 package com.example.o2o.util;
+import com.example.o2o.dto.ImageHolder;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.slf4j.Logger;
@@ -44,9 +45,9 @@ public class ImageUtil {
      * handle the thumbnail from images uploaded by users
      * and return the relative path of image that is stored
      */
-    public static String generateThumbnail(InputStream thumbnailInputStream, String fileName, String targetAddr) {
+    public static String generateThumbnail(ImageHolder thumbnail, String targetAddr) {
         String realFileName = generateRandomName();
-        String extension = getFileExtension(fileName);
+        String extension = getFileExtension(thumbnail.getImageName());
         makeDirPath(targetAddr);
         String relativeAddr = targetAddr + "/" + realFileName + extension;
         logger.debug("current relative address is: " + relativeAddr);
@@ -54,7 +55,7 @@ public class ImageUtil {
         logger.debug("current absolute address is: " + PathUtil.getImgBasePath() + relativeAddr);
 
         try {
-            Thumbnails.of(thumbnailInputStream)
+            Thumbnails.of(thumbnail.getImage())
                     .size(200, 200)
                     .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "watermark.jpg")), 0.25f)
                     .outputQuality(0.8)

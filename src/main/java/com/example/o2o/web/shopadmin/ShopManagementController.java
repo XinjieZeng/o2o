@@ -1,5 +1,6 @@
 package com.example.o2o.web.shopadmin;
 
+import com.example.o2o.dto.ImageHolder;
 import com.example.o2o.dto.ShopExecution;
 import com.example.o2o.entity.*;
 import com.example.o2o.enums.ShopStateEnum;
@@ -80,7 +81,7 @@ public class ShopManagementController {
             Object currentShopObj = request.getSession().getAttribute("currentShop");
             if (currentShopObj == null) {
                 modelMap.put("redirect", true);
-                modelMap.put("url", "o2o/shop/shoplist");
+                modelMap.put("url", "/o2o/shop/shoplist");
                 return modelMap;
             }
 
@@ -189,7 +190,8 @@ public class ShopManagementController {
 
             ShopExecution shopExecution = null;
             try {
-                shopExecution = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+                ImageHolder thumbnail = new ImageHolder(shopImg.getOriginalFilename(), shopImg.getInputStream());
+                shopExecution = shopService.addShop(shop, thumbnail);
                 if (shopExecution.getState() == ShopStateEnum.CHECK.getState()) {
                     modelMap.put("success", true);
                     return modelMap;
@@ -275,9 +277,10 @@ public class ShopManagementController {
             ShopExecution se;
             try {
                 if (shopImg == null) {
-                    se = shopService.modifyShop(shop, null, null);
+                    se = shopService.modifyShop(shop, null);
                 } else {
-                   se = shopService.modifyShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+                    ImageHolder thumbnail = new ImageHolder(shopImg.getOriginalFilename(), shopImg.getInputStream());
+                   se = shopService.modifyShop(shop, thumbnail);
                 }
 
                 if (se.getState() == ShopStateEnum.SUCCESSFUL.getState()) {

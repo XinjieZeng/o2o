@@ -1,6 +1,7 @@
 package com.example.o2o.service.impl;
 
 import com.example.o2o.dao.ShopDao;
+import com.example.o2o.dto.ImageHolder;
 import com.example.o2o.dto.ShopExecution;
 import com.example.o2o.entity.*;
 import com.example.o2o.enums.ShopStateEnum;
@@ -33,7 +34,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) {
+    public ShopExecution addShop(Shop shop, ImageHolder thumbnail) {
         if (shop == null) {
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
         }
@@ -45,8 +46,8 @@ public class ShopServiceImpl implements ShopService {
 
         shopDao.save(shop);
 
-        if (shopImgInputStream != null) {
-            addShopImage(shop, shopImgInputStream, fileName);
+        if (thumbnail.getImage() != null) {
+            addShopImage(shop, thumbnail);
             shopDao.save(shop);
         }
 
@@ -59,18 +60,18 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName) {
+    public ShopExecution modifyShop(Shop shop, ImageHolder thumbnail) {
         if (shop == null || shop.getShopId() == null) {
             return new ShopExecution(ShopStateEnum.NULL_SHOP);
         }
 
         Shop tempShop = getShopById(shop.getShopId());
 
-        if (shopImgInputStream != null &&  !"".equals(fileName)) {
+        if (thumbnail.getImage() != null &&  !"".equals(thumbnail.getImageName())) {
             if (tempShop.getShopImg() != null) {
                 ImageUtil.deleteFileOrPath(tempShop.getShopImg());
             }
-            addShopImage(shop, shopImgInputStream, fileName);
+            addShopImage(shop, thumbnail);
             tempShop.setShopImg(shop.getShopImg());
         }
         tempShop.setShopName(shop.getShopName());
@@ -113,9 +114,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
 
-    private void addShopImage(Shop shop, InputStream shopImgInputStream, String fileName) {
+    private void addShopImage(Shop shop, ImageHolder thumbnail) {
         String dest = PathUtil.getShopImagePath(shop.getShopId());
-        String relativeAdd = ImageUtil.generateThumbnail(shopImgInputStream, fileName, dest);
+        String relativeAdd = ImageUtil.generateThumbnail(thumbnail, dest);
         shop.setShopImg(relativeAdd);
     }
 }
