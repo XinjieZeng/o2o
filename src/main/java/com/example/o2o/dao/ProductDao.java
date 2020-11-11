@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,6 +21,9 @@ public interface ProductDao extends CrudRepository<Product, Long> {
 
     @Override
     void deleteById(Long aLong);
+
+    @Query(value = "SELECT s FROM Product s WHERE (:shopId is null or s.shop.shopId = :shopId)")
+    List<Product> findProductList(@org.apache.ibatis.annotations.Param("shopId") Long shopId);
 
     @Modifying
     @Transactional

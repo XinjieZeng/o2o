@@ -85,6 +85,15 @@ public class ProductServiceImpl implements ProductService {
         return new ProductExecution(ProductStateEnum.EMPTY);
     }
 
+    @Override
+    public ProductExecution getProductList(Long shopId) {
+        List<Product> productList = productDao.findProductList(shopId);
+        if (productList.isEmpty()) {
+            return new ProductExecution(ProductStateEnum.EMPTY);
+        }
+        return new ProductExecution(ProductStateEnum.SUCCESS, productList);
+    }
+
     private void deleteProductImgList(long productId) {
 
         List<ProductImg> productImgList = productImgDao.findProductImgList(productId);

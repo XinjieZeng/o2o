@@ -12,6 +12,7 @@ import com.example.o2o.util.CodeUtil;
 import com.example.o2o.util.HttpServletRequestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.jaxws.SimpleHttpServerJaxWsServiceExporter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -183,7 +184,29 @@ public class ProductManagementController {
         }
 
         modelMap.put("success", false);
-        modelMap.put("errMsg", "请输入商品信息");
+        modelMap.put("errMsg", "please enter product information");
+        return modelMap;
+    }
+
+    @GetMapping("/getproductlistbyshop")
+    @ResponseBody
+    private Map<String, Object> getProductListByShop(HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<>();
+        Shop currentShop = (Shop) request.getSession().getAttribute("currentShop");
+//        Shop currentShop = new Shop();
+//        currentShop.setShopId(28L);
+
+        if (currentShop != null && currentShop.getShopId() != null) {
+
+            ProductExecution pe = productService.getProductList(currentShop.getShopId());
+            modelMap.put("productList", pe.getProductList());
+            modelMap.put("count", pe.getCount());
+            modelMap.put("success", true);
+            return modelMap;
+        }
+
+        modelMap.put("success", false);
+        modelMap.put("errMsg", "empty shopId");
         return modelMap;
     }
 

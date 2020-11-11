@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Product Management</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+</head>
+<body>
+<header class="bar bar-nav">
+    <h1 class="title">Product Management</h1>
+</header>
+<div class="content">
+    <div class="content-block">
+        <div class="row row-product">
+            <div class="col-33">Product name</div>
+            <div class="col-20">Priority</div>
+            <div class="col-40">Operation</div>
+        </div>
+        <div class="product-wrap">
+            <!-- <div class="row row-product">
+                <div class="col-33">#{商品名称}</div>
+                <div class="col-20">#{优先级}</div>
+                <div class="col-40">
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                    <a href="#">预览</a>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="content-block">
+        <div class="row">
+            <div class="col-50">
+                <a href="/o2o/shopoperation"
+                   class="button button-big button-fill button-danger">Return</a>
+            </div>
+            <div class="col-50">
+                <a href="/o2o/productoperation" class="button button-big button-fill button-success"
+                   id="new">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script type="text/javascript" th:src="@{/js/shop/productmanagement.js}"></script>
+
+</body>
+</html>
