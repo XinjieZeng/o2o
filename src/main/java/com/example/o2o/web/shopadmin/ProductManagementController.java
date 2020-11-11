@@ -197,7 +197,6 @@ public class ProductManagementController {
 //        currentShop.setShopId(28L);
 
         if (currentShop != null && currentShop.getShopId() != null) {
-
             ProductExecution pe = productService.getProductList(currentShop.getShopId());
             modelMap.put("productList", pe.getProductList());
             modelMap.put("count", pe.getCount());

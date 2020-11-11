@@ -23,10 +23,10 @@ $(function() {
     function handleList(data) {
         var html = '';
         data.map(function(item, index) {
-            html += '<div class="row row-shop"><div>'
-                + item.shopName + '</div><div>'
+            html += '<div class="row row-shop"><div class="four wide column">'
+                + item.shopName + '</div><div class="four wide column">'
                 + shopStatus(item.enableStatus)
-                + '</div><div>'
+                + '</div><div class="four wide column">'
                 + goShop(item.enableStatus, item.shopId) + '</div></div>';
 
         });

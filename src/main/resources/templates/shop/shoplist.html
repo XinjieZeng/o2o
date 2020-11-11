@@ -7,9 +7,14 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.0/semantic.min.css">
+    <link th:href="@{/css/commons/sm.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/commons/sm-extend.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/shop/shoplist.css}" rel="stylesheet" />
 
 </head>
 <body>
+
 
 <header class="bar bar-nav">
     <h1 class="title">Shop List</h1>
@@ -20,11 +25,13 @@
             Hello,<span id="user-name"></span><a class="pull-right"
                                               href="/o2o/shopoperation">Add Shop</a>
         </p>
-        <div class="row row-shop">
-            <div class="col-40">Shop Name</div>
-            <div class="col-40">State</div>
-            <div class="col-20">Operation</div>
+        <div class="ui grid">
+            <div class="four wide column">Shop Name</div>
+            <div class="four wide column">State</div>
+            <div class="four wide column">Operation</div>
         </div>
+
+
         <div class="shop-wrap"></div>
     </div>
     <div class="content-block">
