@@ -11,7 +11,15 @@ $(function() {
         $.getJSON(listUrl, function(data) {
             if (data.success) {
                 var productList = data.productList;
-                var tempHtml = '';
+                var tempHtml =
+                    '<table class="ui celled striped table">' +
+                    '<thead>' +
+                    '<tr><th>Product Name</th>' +
+                    '<th>Priority</th>' +
+                    '<th>Operation</th>' +
+                    '</tr></thead>' +
+                    '<tbody>';
+
                 productList.map(function(item, index) {
                     var textOp = "off-shelf";
                     var contraryStatus = 0;
@@ -22,14 +30,14 @@ $(function() {
                         contraryStatus = 0;
                     }
                     // concatenate
-                    tempHtml += '' + '<div class="row row-product">'
-                        + '<div class="col-33">'
+                    tempHtml += '' + '<tr>'
+                        + '<td data-label="name" class="right aligned collapsing">'
                         + item.productName
-                        + '</div>'
-                        + '<div class="col-20">'
-                        + item.point
-                        + '</div>'
-                        + '<div class="col-40">'
+                        + '</td>'
+                        + '<td data-label="priority" class="right aligned">'
+                        + item.priority
+                        + '</td>'
+                        + '<td data-label="operation" class="right aligned">'
                         + '<a href="#" class="edit" data-id="'
                         + item.productId
                         + '" data-status="'
@@ -47,10 +55,11 @@ $(function() {
                         + '" data-status="'
                         + item.enableStatus
                         + '">Preview</a>'
-                        + '</div>'
-                        + '</div>';
+                        + '</td>'
+                        + '</tr>';
                 });
 
+                tempHtml += '</tbody>'
                 $('.product-wrap').html(tempHtml);
             }
         });

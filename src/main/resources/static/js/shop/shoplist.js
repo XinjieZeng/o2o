@@ -21,15 +21,24 @@ $(function() {
 
     //concatenate the row information
     function handleList(data) {
-        var html = '';
+        var html =
+            '<table class="ui celled striped table">' +
+            '<thead>' +
+            '<tr><th>Shop Name</th>' +
+            '<th>State</th>' +
+            '<th>Operation</th>' +
+            '</tr></thead>' +
+            '<tbody>';
+
         data.map(function(item, index) {
-            html += '<div class="row row-shop"><div class="four wide column">'
-                + item.shopName + '</div><div class="four wide column">'
+            html += '<tr><td data-label="name" class="right aligned collapsing">'
+                + item.shopName + '</td><td data-label="status" class="right aligned">'
                 + shopStatus(item.enableStatus)
-                + '</div><div class="four wide column">'
-                + goShop(item.enableStatus, item.shopId) + '</div></div>';
+                + '</td><td data-label="operation" class="right aligned">'
+                + goShop(item.enableStatus, item.shopId) + '</td></tr>';
 
         });
+        html += '</tbody>'
         $('.shop-wrap').html(html);
     }
 

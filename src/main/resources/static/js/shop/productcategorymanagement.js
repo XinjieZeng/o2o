@@ -9,24 +9,32 @@ $(function() {
                 function(data) {
                     if (data.success) {
                         var dataList = data.data;
-                        $('.category-wrap').html('');
-                        var tempHtml = '';
-                        dataList
-                            .map(function(item, index) {
+                        // $('.category-wrap').html('');
+
+                        var tempHtml = '<table class="ui celled striped table">' +
+                            '<thead>' +
+                            '<tr><th>Category</th>' +
+                            '<th>Priority</th>' +
+                            '<th>Operation</th>' +
+                            '</tr></thead>' +
+                            '<tbody>';
+
+                        dataList.map(function(item, index) {
                                 tempHtml += ''
-                                    + '<div class="row row-product-category now">'
-                                    + '<div class="col-33 product-category-name">'
+                                    + '<tr>'
+                                    + '<td>'
                                     + item.productCategoryName
-                                    + '</div>'
-                                    + '<div class="col-33">'
+                                    + '</td>'
+                                    + '<td>'
                                     + item.priority
-                                    + '</div>'
-                                    + '<div class="col-33"><a href="#" class="button delete" data-id="'
+                                    + '</td>'
+                                    + '<td><a href="/o2o/shopadmin/removeproductcategory" class="button delete" data-id="'
                                     + item.productCategoryId
-                                    + '">删除</a></div>'
-                                    + '</div>';
+                                    + '">delete</a></td>'
+                                    + '</tr>';
                             });
-                        $('.category-wrap').append(tempHtml);
+                        tempHtml += '</tbody>'
+                        $('.category-wrap').html(tempHtml);
                     }
                 });
     }
