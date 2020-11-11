@@ -72,13 +72,13 @@ $(function() {
             function(e) {
                 var target = $(e.currentTarget);
                 if (target.hasClass('edit')) {
-                    window.location.href = '/o2o/shopadmin/productoperation?productId='
+                    window.location.href = '#'
                         + e.currentTarget.dataset.id;
                 } else if (target.hasClass('status')) {
                     changeItemStatus(e.currentTarget.dataset.id,
                         e.currentTarget.dataset.status);
                 } else if (target.hasClass('preview')) {
-                    window.location.href = '/o2o/frontend/productdetail?productId='
+                    window.location.href = '#'
                         + e.currentTarget.dataset.id;
                 }
             });
